@@ -43,6 +43,6 @@ def process_lines(test_cases):
 
 if __name__ == "__main__":
     with open(sys.argv[1], 'r') as test_cases:
-        print process_lines(test_cases)
+        print process_lines(test_cases.read())
         
 
