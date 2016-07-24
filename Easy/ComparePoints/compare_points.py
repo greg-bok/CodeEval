@@ -36,10 +36,11 @@ def process_line(lineText):
     p2 = Point.fromStrings(fields[2], fields[3])
     return p2.relativePosition(p1)
 
-    
+
 def process_lines(test_cases):
     results = map(process_line, filter(lambda x: len(x.strip()) > 0, test_cases.splitlines()))
-    return "\n".join(results) + "\n"
+    return "\n".join(results)
+
 
 if __name__ == "__main__":
     with open(sys.argv[1], 'r') as test_cases:

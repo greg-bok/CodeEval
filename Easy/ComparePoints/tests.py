@@ -29,5 +29,5 @@ class TestPoint(unittest.TestCase):
 class TestTextProcessing(unittest.TestCase):
     def test_process_lines(self):
         textLines = "1 2 1 2\n\n\n-1 2 -1 3\n\n\n"
-        self.assertEqual(compare_points.process_lines(textLines), "here\nN\n")
+        self.assertEqual(compare_points.process_lines(textLines), "here\nN")
 
