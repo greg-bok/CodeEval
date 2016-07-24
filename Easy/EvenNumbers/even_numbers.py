@@ -4,7 +4,10 @@ def is_even(x):
     return x % 2 == 0
 
 def process_line(lineText):
-    return is_even(int(lineText)).lower()
+    if(is_even(int(lineText))):
+        return "true"
+    else:
+        return false
 
 def process_lines(text):
     nonBlank = filter(lambda x: len(x.strip()) > 0, text.splitlines())
