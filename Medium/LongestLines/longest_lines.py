@@ -5,18 +5,19 @@ import os
 class BoundedOrderedBuffer:
     def __init__(self, maxSize):
         self._buffer = []
+        self._size = 0
+        self._maxSize = maxSize
+        self._min = 0
+        self._max = 0
         
-    def add(self, item):
+    def add(self, item):        
         self._buffer.append(item)
-        
+        self._buffer.sort()
+        slice = min(len(self._buffer), self._maxSize)
+        self._buffer = self._buffer[:slice]
+    
     def items(self):
         return self._buffer
-
-    def __eq__(self, other):
-        return self._value == other._value
-
-    def __ne__(self, other):
-        return self._value != other._value
 
 
 class LongestLines:

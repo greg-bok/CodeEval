@@ -5,12 +5,15 @@ class TestItem:
     def __init__(self, value):
         self._value = value
 
-    def size(self):
+    def value(self):
         return self._value
         
     def __str__(self):
         return "%i"%(self._value)
 
+    def __cmp__(self, other):
+        return cmp(other._value, self._value)
+    
 
 class TestBoundedOrderdBuffer(unittest.TestCase):
     def test_empty(self):
@@ -25,9 +28,11 @@ class TestBoundedOrderdBuffer(unittest.TestCase):
 
         subjectUnderTest.add(item1)
         subjectUnderTest.add(item2)
-        subjectUnderTets.add(item3)
+        subjectUnderTest.add(item3)
         
-        self.assertEqual(subjectUnderTest.items(), [item1, item3])
+        result = map(lambda x: x.value(), subjectUnderTest.items())
+        self.assertEqual(result, [2, 2])
+
 
     def test_valuesSortedDescending(self):
         subjectUnderTest = longest_lines.BoundedOrderedBuffer(3)
@@ -44,8 +49,9 @@ class TestBoundedOrderdBuffer(unittest.TestCase):
         subjectUnderTest.add(item4)
         subjectUnderTest.add(item5)
         subjectUnderTest.add(item6)
-        
-        self.assertEqual(subjectUnderTest.items(), [item4, item3])
+
+        result = map(lambda x: x.value(), subjectUnderTest.items())
+        self.assertEqual(result, [4, 3, 3])
 
         
 
