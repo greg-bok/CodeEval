@@ -1,0 +1,2 @@
+Vampires: 1, Zombies: 3, Witches:2, Houses: 3
+Vampires: 2, Zombies: 1, Witches:3, Houses: 2
