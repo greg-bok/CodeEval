@@ -1,65 +1,98 @@
 import os
 import sys
 
-class Halloween:
-    vampireValue = 3
-    zombieValue  = 4
-    witchValue = 5
+class TrickOrTreater:
+    VampireValue = 3
+    ZombieValue  = 4
+    WitchValue = 5
 
-    def __init__(self, v, z, w, h):
-        self._vampires = v
-        self._zombies = z
-        self._witches = w
-        self._houses = h
+    def __init__(self, count, value):
+        self._count = count
+        self._value = value
 
-    def vampires(self):
-        return self._vampires
+    def count(self):
+        return self._count
 
-    def zombies(self):
-        return self._zombies
+    def totalValue(self):
+        return (self._count * self._value)
+
+    @staticmethod
+    def createVampire(c):
+        return TrickOrTreater(c, TrickOrTreater.VampireValue)
     
-    def witches(self):
-        return self._witches
+    @staticmethod
+    def createZombie(c):
+        return TrickOrTreater(c, TrickOrTreater.ZombieValue)
+
+    @staticmethod
+    def createWitch(c):
+        return TrickOrTreater(c, TrickOrTreater.WitchValue)
+
+
+class Halloween:
+    def __init__(self, children, h):
+        self._children = children
+        self._houses = h
 
     def houses(self):
         return self._houses
+
+    def totalChildren(self):
+        return sum(map(lambda x: x.count(), self._children))
         
+    def candyPerHouse(self):
+        return sum(map(lambda x: x.totalValue(), self._children))
+    
     def candyShare(self):
-        perHouseCandy = self._vampire * vampireValue
-        perHouseCandy += self._zombie * zombieValue
-        perHouseCandy += self._witch * witchValue
-        return 0
+        return int((self.candyPerHouse() * self._houses) / float(self.totalChildren()))
+    
+    def __str__(self):
+        return "%s"%(self.candyShare())
 
 
 class LineProcessor:
-    parseMap = {"V" : "Vampires",
-                "Z" : "Zombies",
-                "W" : "Witches",
-                "H" : "Houses" }
+    def __init__(self):
+        self._vampireCache = {}
+        self._zombieCache = {}
+        self._witchCache = {}
+        self._houseCache = {}
 
     def processLine(self, lineText):
-        idx = 0
-        vampires = 0
-        zombies = 0
-        witches = 0
-        houses = 0
         vs,zs,ws,hs = lineText.strip().split(",")
-        rvc = vs.split(":")[1]
-        rzc = zs.split(":")[1]
-        rwc = ws.split(":")[1]
-        rhc = hs.split(":")[1]
-        vampires = int(rvc)
-        zombies = int(rzc)
-        witches = int(rwc)
-        houses = int(rhc)
+        children = []
+        children.append(self.getVampire(vs.split(":")[1]))
+        children.append(self.getZombie(zs.split(":")[1]))
+        children.append(self.getWitch(ws.split(":")[1]))
+        houses = self.getHouse(hs.split(":")[1])
+        return Halloween(children, houses)
+        
+    def getVampire(self, rc):
+        return self.getTrickOrTreater(TrickOrTreater.createVampire, self._vampireCache, rc)
 
-        return Halloween(vampires, zombies, witches, houses)
+    def getZombie(self, rc):
+        return self.getTrickOrTreater(TrickOrTreater.createZombie, self._zombieCache, rc)
 
+    def getWitch(self, rc):
+        return self.getTrickOrTreater(TrickOrTreater.createWitch, self._witchCache, rc)
+
+    def getTrickOrTreater(self, build, cache, value):
+        sval = value.strip()
+        if sval not in cache:
+            cache[sval] = build(int(sval))
+        return cache[sval]
+
+    def getHouse(self, rh):
+        srh = rh.strip()
+        if srh not in self._houseCache:
+            self._houseCache[srh] = int(srh)
+        return self._houseCache[srh]
 
 
 def process_file(f):
-    pass
+    processor = LineProcessor()
+    for line in f:
+        print processor.processLine(line)    
 
 if __name__ == "__main__":
     with open(sys.argv[1], 'r') as fd:
-        print process_file(fd)
+        process_file(fd)
