@@ -12,7 +12,7 @@ class TestItem:
         return "%i"%(self._value)
 
     def __cmp__(self, other):
-        return cmp(other._value, self._value)
+        return cmp(self._value, other._value)
     
 
 class TestBoundedOrderdBuffer(unittest.TestCase):
